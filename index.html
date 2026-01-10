@@ -11,10 +11,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ADICIONADA A COR 'modelo-bordo'
         tailwind.config = { theme: { extend: { colors: { nec: { dark: '#111111', gold: '#C5A059', gray: '#F8F8F8', charcoal: '#1F2937' }, modelo: { bordo: '#800000' } }, fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] } } } }
     </script>
     <style>
+        /* Correção para evitar rolagem lateral no mobile */
+        body { overflow-x: hidden; } 
+        
         .video-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
         .video-slide.active { opacity: 1; }
         .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: #25d366; color: white; width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); z-index: 9999; transition: all 0.3s ease; }
@@ -24,22 +26,18 @@
         .timeline-dot { position: absolute; left: -9px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #333; transition: all 0.3s; }
         .timeline-item.completed .timeline-dot { background: #C5A059; box-shadow: 0 0 10px #C5A059; }
         .timeline-item.completed { border-left-color: #C5A059; }
-        /* Efeito da Galeria */
         .gallery-item { overflow: hidden; position: relative; }
         .gallery-item img { transition: transform 0.5s ease; }
         .gallery-item:hover img { transform: scale(1.1); }
         .gallery-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
     </style>
-
-	
 </head>
 <body class="font-sans text-gray-800 antialiased bg-white selection:bg-modelo-bordo selection:text-white">
 
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 lg:px-12 bg-transparent text-white border-b border-white/10 hover:bg-nec-dark/95 hover:backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#"><img src="assets/logo.png" alt="Marcenaria Modelo" class="h-16 group hover:opacity-90 transition-opacity"></a>
-            
             <div class="hidden lg:flex gap-8 items-center text-sm font-medium tracking-wide uppercase">
                 <a href="#home" class="hover:text-nec-gold transition-colors">Home</a>
                 <a href="#area-cliente" class="text-nec-gold hover:text-white transition-colors font-bold"><i class="fa-solid fa-truck-fast"></i> Rastrear</a>
@@ -53,7 +51,15 @@
             </div>
             <button class="lg:hidden text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"><i class="fa-solid fa-bars"></i></button>
         </div>
-        </nav>
+        
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-nec-dark text-white p-6 shadow-xl lg:hidden border-t border-white/10">
+            <div class="flex flex-col gap-4 text-center uppercase text-sm tracking-widest">
+                <a href="#home" class="py-3 border-b border-white/10">Home</a>
+                <a href="#area-cliente" class="py-3 text-nec-gold font-bold border-b border-white/10">Rastrear Pedido</a>
+                <a href="#contato" class="py-3">Orçamento</a>
+            </div>
+        </div>
+    </nav>
 
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
@@ -75,6 +81,7 @@
     </section>
 
     <section id="area-cliente" class="py-24 bg-nec-charcoal text-white relative overflow-hidden border-t-4 border-modelo-bordo">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-nec-gold/5 rounded-full blur-3xl"></div>
         <div class="max-w-6xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center relative z-10">
             <div data-aos="fade-right">
                 <span class="text-nec-gold font-bold tracking-widest uppercase text-sm mb-2 block">Transparência Total</span>
@@ -100,8 +107,7 @@
             <div data-aos="fade-right">
                 <span class="text-modelo-bordo font-bold tracking-widest uppercase text-sm">Tradição & Confiança</span>
                 <h2 class="font-serif text-4xl lg:text-5xl text-nec-dark mt-4 mb-8">O Legado da Marcenaria Modelo.</h2>
-                <p class="text-gray-600 text-lg leading-relaxed mb-6">Há anos transformando sonhos em realidade em Andradina e região. Nossa fundação se baseia na honestidade, na qualidade inegociável dos materiais e no compromisso absoluto com os prazos.</p>
-                <p class="text-gray-600 text-lg leading-relaxed mb-8">"Não vendemos apenas móveis, entregamos a certeza de um lar feito sob medida para sua família."</p>
+                <p class="text-gray-600 text-lg leading-relaxed mb-6">Há anos transformando sonhos em realidade em Andradina e região.</p>
                 <div class="flex items-center gap-4">
                     <div class="h-1 w-12 bg-modelo-bordo"></div>
                     <p class="font-bold text-nec-dark uppercase tracking-wider">Fundador</p>
@@ -110,22 +116,6 @@
             <div class="relative group" data-aos="fade-left">
                 <div class="absolute -bottom-6 -right-6 w-full h-full border-4 border-modelo-bordo z-0 hidden lg:block"></div>
                 <img src="assets/dono.png" alt="Fundador" class="relative z-10 w-full h-[500px] object-cover shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700">
-            </div>
-        </div>
-    </section>
-
-    <section id="arquiteta" class="py-24 bg-nec-gray">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
-            <div class="relative group lg:order-1 order-2" data-aos="fade-right">
-                <div class="absolute -top-6 -left-6 w-full h-full border-4 border-nec-gold z-0 hidden lg:block"></div>
-                <img src="assets/arquiteta.png" alt="Arquiteta Maria Antonieta" class="relative z-10 w-full h-[500px] object-cover shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700">
-                <div class="absolute bottom-8 right-8 bg-white p-4 shadow-lg z-20 border-l-4 border-nec-gold"><p class="font-serif text-2xl text-nec-dark font-bold">Maria Antonieta</p><p class="text-xs uppercase tracking-widest text-gray-500">Arquiteta Responsável</p></div>
-            </div>
-            <div data-aos="fade-left" class="lg:order-2 order-1">
-                <span class="text-nec-gold font-bold tracking-widest uppercase text-sm">Curadoria de Design</span>
-                <h2 class="font-serif text-4xl lg:text-5xl text-nec-dark mt-4 mb-8">O olhar que transforma ambientes.</h2>
-                <p class="text-gray-600 text-lg leading-relaxed mb-6">Sob a curadoria técnica de <strong>Maria Antonieta</strong>, cada projeto da Marcenaria Modelo une a robustez da indústria com a leveza do design contemporâneo.</p>
-                <div class="bg-white p-6 border-l-4 border-nec-gold shadow-sm"><h4 class="font-bold text-nec-dark mb-2 uppercase text-sm tracking-wider">Diferenciais Técnicos:</h4><ul class="space-y-2 text-gray-600 text-sm"><li><i class="fa-solid fa-check text-nec-gold mr-2"></i> Ergonomia e Fluxo de Uso</li><li><i class="fa-solid fa-check text-nec-gold mr-2"></i> Combinação de Texturas (Laca, Madeira, Vidro)</li><li><i class="fa-solid fa-check text-nec-gold mr-2"></i> Iluminação LED Integrada</li></ul></div>
             </div>
         </div>
     </section>
@@ -149,46 +139,33 @@
         <div class="max-w-3xl mx-auto px-6" data-aos="fade-up">
             <span class="text-modelo-bordo font-bold tracking-widest uppercase text-sm">Nossa Força</span>
             <h2 class="font-serif text-4xl mt-4 mb-8 text-nec-dark">Mãos que Constroem.</h2>
-            <p class="text-gray-600 text-lg leading-relaxed mb-12">Por trás de cada projeto entregue, existe uma equipe de marceneiros, montadores e acabadores dedicados à perfeição. A Marcenaria Modelo é feita de pessoas apaixonadas pelo que fazem.</p>
-            <img src="assets/equipe.png" alt="Equipe Marcenaria Modelo" class="w-full max-w-xl mx-auto rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 border-b-4 border-modelo-bordo">
+            <img src="assets/equipe.png" alt="Equipe" class="w-full max-w-xl mx-auto rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 border-b-4 border-modelo-bordo">
         </div>
     </section>
 
-	<div class="bg-white p-8 shadow-2xl rounded-sm border-t-4 border-modelo-bordo" data-aos="fade-left">
+    <section id="contato" class="py-24 bg-nec-gray relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 relative z-10">
+            <div data-aos="fade-right">
+                <h2 class="font-serif text-4xl text-nec-dark mb-6">Vamos iniciar seu projeto?</h2>
+                <div class="space-y-4 text-gray-700">
+                    <p class="flex items-center gap-3"><i class="fa-brands fa-whatsapp text-whatsapp text-xl"></i> <span class="font-bold">18 99777-7079</span></p>
+                    <p class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-modelo-bordo text-xl"></i> Parque Industrial 2, Andradina - SP</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-8 shadow-2xl rounded-sm border-t-4 border-modelo-bordo" data-aos="fade-left">
                 <form id="form-contato" onsubmit="enviarLead(event)" class="space-y-6">
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
-                        <input type="text" id="lead-nome" required class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
-                    </div>
-                    
+                    <div><label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label><input type="text" id="lead-nome" required class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none"></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">WhatsApp (Com DDD)</label>
-                            <input type="tel" id="lead-zap" required placeholder="Ex: 18999999999" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ambiente de Interesse</label>
-                            <select id="lead-ambiente" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors bg-white">
-                                <option>Cozinha Planejada</option>
-                                <option>Dormitório / Closet</option>
-                                <option>Home Theater / Sala</option>
-                                <option>Banheiros</option>
-                                <option>Corporativo / Escritório</option>
-                                <option>Casa Completa</option>
-                            </select>
-                        </div>
+                        <div><label class="text-xs font-bold text-gray-400 uppercase tracking-wider">WhatsApp</label><input type="tel" id="lead-zap" required placeholder="Ex: 18999999999" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none"></div>
+                        <div><label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ambiente</label><select id="lead-ambiente" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none bg-white"><option>Cozinha Planejada</option><option>Dormitório / Closet</option><option>Home Theater / Sala</option><option>Banheiros</option><option>Corporativo</option><option>Casa Completa</option></select></div>
                     </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagem (Opcional)</label>
-                        <textarea id="lead-msg" rows="2" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors resize-none"></textarea>
-                    </div>
-
-                    <button type="submit" id="btn-enviar" class="w-full bg-modelo-bordo text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-lg rounded-sm text-sm">
-                        Solicitar Orçamento
-                    </button>
+                    <div><label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagem</label><textarea id="lead-msg" rows="2" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none resize-none"></textarea></div>
+                    <button type="submit" id="btn-enviar" class="w-full bg-modelo-bordo text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-lg rounded-sm text-sm">Solicitar Orçamento</button>
                 </form>
             </div>
+        </div>
+    </section>
 
     <footer class="bg-black text-white pt-20 pb-10 border-t border-white/10">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
