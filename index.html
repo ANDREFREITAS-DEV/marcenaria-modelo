@@ -62,28 +62,56 @@
     </nav>
 
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+        
         <div class="absolute inset-0 z-0">
-            <video muted loop playsinline class="video-slide"><source video-topo.mp4 type="video-topo.mp4"></video>
-            <video muted loop playsinline class="video-slide"><source src="https://assets.mixkit.co/videos/preview/mixkit-modern-kitchen-interior-design-view-26462-large.mp4" type="video-topo.mp4"></video>
-            <video muted loop playsinline class="video-slide"><source src="https://assets.mixkit.co/videos/preview/mixkit-woman-working-on-tablet-in-office-40476-large.mp4" type="video/mp4"></video>
+            <video muted loop playsinline class="video-slide active">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+            <video muted loop playsinline class="video-slide">
+                <source src="video2.mp4" type="video/mp4">
+            </video>
+            <video muted loop playsinline class="video-slide">
+                <source src="video3.mp4" type="video/mp4">
+            </video>
         </div>
+
         <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/30 to-black/80 z-10"></div>
-        <div class="absolute bottom-0 left-0 h-1 bg-white/20 z-20 w-full"><div id="progress-bar" class="h-full bg-nec-gold w-0"></div></div>
+        <div class="absolute bottom-0 left-0 h-1 bg-white/20 z-20 w-full">
+            <div id="progress-bar" class="h-full bg-nec-gold w-0"></div>
+        </div>
 
         <div class="relative z-20 text-center text-white px-4 max-w-5xl mx-auto" data-aos="fade-up">
             <div class="inline-block border border-nec-gold/50 bg-black/40 backdrop-blur-md px-6 py-2 mb-8 rounded-full">
-                <p class="text-nec-gold tracking-[0.2em] uppercase text-xs font-bold"><i class="fa-solid fa-location-dot mr-2"></i>Parque Industrial 2 • Andradina</p>
+                <p class="text-nec-gold tracking-[0.2em] uppercase text-xs font-bold">
+                    <i class="fa-solid fa-location-dot mr-2"></i>Parque Industrial 2 • Andradina
+                </p>
             </div>
-            <h1 class="font-serif text-5xl lg:text-7xl mb-8 leading-tight drop-shadow-2xl">A Excelência da Arquitetura. <br><span class="italic font-light text-gray-300">A Precisão da Indústria.</span></h1>
-            <p class="text-lg text-gray-200 mb-10 font-light max-w-3xl mx-auto leading-relaxed">Móveis planejados de alto padrão com design assinado pela renomada <strong class="text-white">Arquiteta Maria Antonieta</strong>. Utilizamos materiais nobres como <strong class="text-nec-gold">MDF Louro Freijó</strong> e <strong class="text-nec-gold">Laca Branca Fosca</strong>.</p>
+            
+            <h1 class="font-serif text-5xl lg:text-7xl mb-8 leading-tight drop-shadow-2xl">
+                A Excelência da Arquitetura. <br>
+                <span class="italic font-light text-gray-300">A Precisão da Indústria.</span>
+            </h1>
+            
+            <p class="text-lg text-gray-200 mb-10 font-light max-w-3xl mx-auto leading-relaxed">
+                Móveis planejados de alto padrão com design assinado pela renomada <strong class="text-white">Arquiteta Maria Antonieta</strong>. 
+                Utilizamos materiais nobres como <strong class="text-nec-gold">MDF Louro Freijó</strong> e <strong class="text-nec-gold">Laca Branca Fosca</strong>.
+            </p>
+
             <div class="inline-block bg-white/10 backdrop-blur-md px-8 py-3 rounded-sm border border-white/20 mb-10">
-                <span class="text-nec-gold font-bold text-xl block">45 Dias</span><span class="text-xs uppercase tracking-widest text-gray-300">O Prazo mais rápido da cidade</span>
+                <span class="text-nec-gold font-bold text-xl block">45 Dias</span>
+                <span class="text-xs uppercase tracking-widest text-gray-300">O Prazo mais rápido da cidade</span>
             </div>
+            
             <div class="flex flex-col sm:flex-row gap-5 justify-center">
-                <a href="#area-cliente" class="bg-nec-gold text-white hover:bg-white hover:text-nec-gold px-10 py-4 transition-all uppercase text-sm tracking-widest font-bold shadow-lg shadow-yellow-900/20 flex items-center justify-center gap-3"><i class="fa-solid fa-magnifying-glass"></i> Acompanhar Meu Pedido</a>
-                <a href="#contato" class="group border border-white hover:bg-white hover:text-nec-dark px-10 py-4 transition-all uppercase text-sm tracking-widest font-semibold backdrop-blur-sm">Falar com Consultor</a>
+                <a href="#area-cliente" class="bg-nec-gold text-white hover:bg-white hover:text-nec-gold px-10 py-4 transition-all uppercase text-sm tracking-widest font-bold shadow-lg shadow-yellow-900/20 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-magnifying-glass"></i> Acompanhar Meu Pedido
+                </a>
+                <a href="#contato" class="group border border-white hover:bg-white hover:text-nec-dark px-10 py-4 transition-all uppercase text-sm tracking-widest font-semibold backdrop-blur-sm">
+                    Falar com Consultor
+                </a>
             </div>
         </div>
+    </section>
     </section>
 
     <section id="area-cliente" class="py-24 bg-nec-charcoal text-white relative overflow-hidden">
@@ -154,7 +182,15 @@
         </div>
     </section>
 
-    <footer class="bg-black text-white pt-16 pb-8 text-center text-sm text-gray-500 border-t border-white/10"><p>&copy; 2026 NEC Planejados. Parque Industrial 2, Andradina - SP.</p></footer>
+    <footer class="bg-black text-white pt-16 pb-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm text-gray-500 mb-4">&copy; 2026 Marcenaria Modelo Moveis Planejados. Bairro Pelliciaria 2222, Andradina - SP.</p>
+            
+            <a href="admin.html" class="inline-flex items-center gap-2 text-xs text-gray-700 hover:text-nec-gold transition-colors uppercase tracking-widest font-bold py-2 px-4 rounded-full border border-transparent hover:border-nec-gold/20">
+                <i class="fa-solid fa-lock"></i> Área Restrita
+            </a>
+        </div>
+    </footer>
     <a href="https://wa.me/5518999999999" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
