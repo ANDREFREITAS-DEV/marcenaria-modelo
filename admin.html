@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEC Admin | ERP Seguro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { nec: { dark: '#111111', gold: '#C5A059' } } } } }
+    </script>
+</head>
+<body class="bg-gray-100 font-sans text-sm h-screen flex flex-col overflow-hidden">
+
+    <script>
+        const PROJECT_URL = 'https://jbtqvheeeqtiovakfqcn.supabase.co'; 
+        const PROJECT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidHF2aGVlZXF0aW92YWtmcWNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5ODcxNzEsImV4cCI6MjA4MTU2MzE3MX0.T93A20M56NiKamag6FW6q1T2YnFiSu5s3snFGMSsIHQ'; 
+        const supabaseClient = window.supabase.createClient(PROJECT_URL, PROJECT_KEY);
+    </script>
+
+    <div id="auth-screen" class="fixed inset-0 bg-nec-dark z-[9999] flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-2xl w-96 text-center">
+            <h1 class="text-3xl font-serif font-bold mb-2">NEC <span class="text-nec-gold">ADMIN</span></h1>
+            <p class="text-gray-500 mb-6">Acesso restrito via Supabase</p>
+            <form onsubmit="fazerLogin(event)" class="space-y-4">
+                <input type="email" id="email" placeholder="E-mail" class="w-full border p-3 rounded outline-none focus:border-nec-gold" required>
+                <input type="password" id="password" placeholder="Senha" class="w-full border p-3 rounded outline-none focus:border-nec-gold" required>
+                <button type="submit" id="btn-login" class="w-full bg-nec-gold text-white font-bold py-3 rounded hover:bg-black transition-colors">ENTRAR</button>
+            </form>
+            <p id="error-msg" class="text-red-500 text-xs mt-4 hidden"></p>
+        </div>
+    </div>
+
+    <div id="app-content" class="hidden flex-col h-full">
+        <header class="bg-nec-dark text-white px-6 py-3 flex justify-between items-center shadow-md z-10">
+            <div class="flex items-center gap-6">
+                <h1 class="font-serif font-bold tracking-widest text-lg">NEC <span class="text-nec-gold text-xs">ERP</span></h1>
+                <nav class="flex space-x-1 bg-white/10 rounded p-1">
+                    <button onclick="mudarAba('producao')" id="tab-producao" class="px-4 py-1.5 rounded font-bold text-xs uppercase bg-nec-gold text-nec-dark">Produção</button>
+                    <button onclick="mudarAba('financeiro')" id="tab-financeiro" class="px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-white/20">Financeiro</button>
+                </nav>
+            </div>
+            <button onclick="fazerLogout()" class="text-xs text-gray-400 hover:text-white flex items-center gap-2"><i class="fa-solid fa-right-from-bracket"></i> SAIR</button>
+        </header>
+
+        <main class="flex-1 overflow-auto p-6 relative">
+            <div id="view-producao" class="space-y-6 max-w-7xl mx-auto">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Painel de Produção</h2>
+                    <button onclick="document.getElementById('modal-projeto').showModal()" class="bg-nec-dark text-white px-4 py-2 rounded font-bold shadow flex items-center gap-2 hover:bg-nec-gold hover:text-nec-dark"><i class="fa-solid fa-plus"></i> Novo Contrato</button>
+                </div>
+                <div class="bg-white rounded shadow overflow-hidden">
+                    <table class="w-full text-left"><thead class="bg-gray-50 text-gray-600 uppercase text-xs font-bold border-b"><tr><th class="p-4 w-24">CPF</th><th class="p-4">Projeto</th><th class="p-4">Timeline</th><th class="p-4 text-center">Status</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="lista-projetos"></tbody></table>
+                    <div id="empty-projetos" class="hidden p-10 text-center text-gray-400">Nenhum contrato ativo.</div>
+                </div>
+            </div>
+
+            <div id="view-financeiro" class="hidden space-y-6 max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded shadow border-l-4 border-green-500"><p class="text-xs font-bold text-gray-400 uppercase">A Receber</p><h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-receber">R$ 0,00</h3></div>
+                    <div class="bg-white p-6 rounded shadow border-l-4 border-red-500"><p class="text-xs font-bold text-gray-400 uppercase">A Pagar</p><h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-pagar">R$ 0,00</h3></div>
+                    <div class="bg-nec-dark text-white p-6 rounded shadow border-l-4 border-nec-gold"><p class="text-xs font-bold text-gray-400 uppercase">Saldo</p><h3 class="text-2xl font-bold text-nec-gold mt-1" id="kpi-saldo">R$ 0,00</h3></div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded shadow flex flex-col h-[500px]"><div class="p-4 border-b flex justify-between bg-gray-50"><h3 class="font-bold">Receber</h3><button onclick="abrirModalReceita()" class="text-xs bg-green-500 text-white px-3 py-1 rounded font-bold">+ Receita</button></div><div class="overflow-auto flex-1 p-2"><table class="w-full text-left text-xs"><tbody id="lista-receber"></tbody></table></div></div>
+                    <div class="bg-white rounded shadow flex flex-col h-[500px]"><div class="p-4 border-b flex justify-between bg-gray-50"><h3 class="font-bold">Pagar</h3><div><button onclick="document.getElementById('modal-fornecedor').showModal()" class="text-xs bg-gray-200 px-3 py-1 rounded font-bold mr-2">Fornecedores</button><button onclick="abrirModalDespesa()" class="text-xs bg-red-500 text-white px-3 py-1 rounded font-bold">+ Despesa</button></div></div><div class="overflow-auto flex-1 p-2"><table class="w-full text-left text-xs"><tbody id="lista-pagar"></tbody></table></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <input type="file" id="input-upload" class="hidden" accept="image/*">
+
+    <dialog id="modal-projeto" class="p-0 rounded w-full max-w-lg backdrop:bg-black/80"><div class="bg-nec-dark text-white p-4 flex justify-between"><h3 class="font-bold">Novo Contrato</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarProjeto(event)" class="p-6 space-y-4 bg-white"><input id="proj-nome" required placeholder="Nome Cliente" class="w-full border p-2"><div class="grid grid-cols-2 gap-4"><input id="proj-cpf" required placeholder="CPF" class="w-full border p-2"><input type="date" id="proj-prazo" required class="w-full border p-2"></div><input id="proj-titulo" required placeholder="Título" class="w-full border p-2"><button class="w-full bg-nec-gold text-white font-bold py-3 rounded">CRIAR</button></form></dialog>
+    <dialog id="modal-receita" class="p-0 rounded w-full max-w-md backdrop:bg-black/80"><div class="bg-green-600 text-white p-4 flex justify-between"><h3 class="font-bold">Nova Receita</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarReceita(event)" class="p-6 space-y-4 bg-white"><select id="rec-projeto" required class="w-full border p-2"></select><input id="rec-desc" placeholder="Descrição" class="w-full border p-2"><div class="grid grid-cols-2 gap-4"><input type="number" step="0.01" id="rec-valor" placeholder="R$" class="w-full border p-2"><input type="date" id="rec-data" required class="w-full border p-2"></div><button class="w-full bg-green-600 text-white font-bold py-3 rounded">SALVAR</button></form></dialog>
+    <dialog id="modal-despesa" class="p-0 rounded w-full max-w-md backdrop:bg-black/80"><div class="bg-red-500 text-white p-4 flex justify-between"><h3 class="font-bold">Nova Despesa</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarDespesa(event)" class="p-6 space-y-4 bg-white"><select id="pag-fornecedor" required class="w-full border p-2"></select><input id="pag-desc" placeholder="Descrição" class="w-full border p-2"><div class="grid grid-cols-2 gap-4"><input type="number" step="0.01" id="pag-valor" placeholder="R$" class="w-full border p-2"><input type="date" id="pag-data" required class="w-full border p-2"></div><button class="w-full bg-red-500 text-white font-bold py-3 rounded">SALVAR</button></form></dialog>
+    <dialog id="modal-fornecedor" class="p-0 rounded w-full max-w-sm backdrop:bg-black/80"><div class="bg-gray-700 text-white p-4 flex justify-between"><h3 class="font-bold">Novo Fornecedor</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarFornecedor(event)" class="p-6 space-y-4 bg-white"><input id="forn-nome" required placeholder="Empresa" class="w-full border p-2"><input id="forn-cat" placeholder="Categoria" class="w-full border p-2"><button class="w-full bg-gray-700 text-white font-bold py-3 rounded">CADASTRAR</button></form></dialog>
+
+    <script>
+        let estado = { projetos: [], receber: [], pagar: [], fornecedores: [] };
+        let projetoUploadId = null;
+
+        // --- SISTEMA DE LOGIN (AUTH) ---
+        async function checarSessao() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.remove('hidden');
+                document.getElementById('app-content').classList.add('flex');
+                carregarTudo();
+            } else {
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('app-content').classList.add('hidden');
+            }
+        }
+
+        async function fazerLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-login');
+            
+            btn.innerHTML = 'Verificando...'; btn.disabled = true;
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                document.getElementById('error-msg').innerText = "Login inválido. Verifique e-mail e senha.";
+                document.getElementById('error-msg').classList.remove('hidden');
+                btn.innerHTML = 'ENTRAR'; btn.disabled = false;
+            } else {
+                location.reload(); // Recarrega para ativar a sessão
+            }
+        }
+
+        async function fazerLogout() {
+            await supabaseClient.auth.signOut();
+            location.reload();
+        }
+
+        // Inicializa verificando quem é
+        checarSessao();
+
+        // --- RESTANTE DAS FUNÇÕES (MESMA LÓGICA ANTERIOR) ---
+        function mudarAba(aba) {
+            document.getElementById('view-producao').classList.add('hidden');
+            document.getElementById('view-financeiro').classList.add('hidden');
+            document.getElementById('tab-producao').className = "px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-white/20";
+            document.getElementById('tab-financeiro').className = "px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-white/20";
+            document.getElementById('view-' + aba).classList.remove('hidden');
+            document.getElementById('tab-' + aba).className = "px-4 py-1.5 rounded font-bold text-xs uppercase bg-nec-gold text-nec-dark";
+        }
+
+        async function carregarTudo() {
+            try {
+                let resProj = await supabaseClient.from('projects').select('*, clients(full_name, cpf), project_steps(*)').order('created_at', {ascending: false});
+                estado.projetos = resProj.data || []; renderProjetos();
+                let resRec = await supabaseClient.from('contas_receber').select('*, projects(title, clients(full_name))').order('data_vencimento');
+                estado.receber = resRec.data || [];
+                let resPag = await supabaseClient.from('contas_pagar').select('*, fornecedores(nome_empresa)').order('data_vencimento');
+                estado.pagar = resPag.data || [];
+                let resForn = await supabaseClient.from('fornecedores').select('*').order('nome_empresa');
+                estado.fornecedores = resForn.data || []; renderFinanceiro();
+            } catch (err) { console.error(err); }
+        }
+
+        function renderProjetos() {
+            const tbody = document.getElementById('lista-projetos'); tbody.innerHTML = '';
+            if(!estado.projetos.length) return document.getElementById('empty-projetos').classList.remove('hidden');
+            document.getElementById('empty-projetos').classList.add('hidden');
+            estado.projetos.forEach(p => {
+                const steps = p.project_steps.sort((a,b) => a.display_order - b.display_order);
+                const pct = steps.length ? Math.round((steps.filter(s=>s.is_completed).length / steps.length)*100) : 0;
+                const imgClass = p.render_url ? 'text-nec-gold border-nec-gold bg-yellow-50' : 'text-gray-300 border-dashed hover:text-nec-gold';
+                
+                let timeline = '<div class="flex gap-1">';
+                steps.forEach(s => {
+                    let cor = s.is_completed ? 'bg-nec-gold text-white border-nec-gold' : 'bg-white text-gray-300 border-gray-300';
+                    let icon = s.is_completed ? '<i class="fa-solid fa-check"></i>' : s.display_order;
+                    timeline += `<div onclick="toggleStep('${s.id}', ${!s.is_completed})" class="cursor-pointer w-6 h-6 rounded-full border flex items-center justify-center text-[10px] hover:scale-110 transition ${cor}" title="${s.step_name}">${icon}</div>`;
+                });
+                timeline += `</div><div class="text-[10px] text-gray-400 mt-1">${pct}% Pronto</div>`;
+
+                tbody.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 font-mono font-bold text-gray-500">${p.clients.cpf}</td><td class="p-4"><div class="flex gap-3 items-center"><button onclick="triggerUpload('${p.id}')" class="w-10 h-10 rounded border flex items-center justify-center transition ${imgClass}"><i class="fa-solid fa-image"></i></button><div><div class="font-bold text-gray-800">${p.clients.full_name}</div><div class="text-xs text-nec-gold uppercase">${p.title}</div></div></div></td><td class="p-4">${timeline}</td><td class="p-4 text-center"><span class="px-2 py-1 rounded text-[10px] font-bold ${pct===100?'bg-green-100 text-green-700':'bg-blue-50 text-blue-700'}">${pct===100?'ENTREGUE':'EM PRODUÇÃO'}</span></td><td class="p-4 text-right space-x-2 flex justify-end"><button onclick="gerarPDF('${p.id}')" class="bg-red-100 text-red-600 w-8 h-8 rounded hover:bg-red-600 hover:text-white"><i class="fa-solid fa-file-pdf"></i></button><button onclick="enviarZap('${p.clients.full_name}', '${p.id}')" class="bg-green-100 text-green-600 w-8 h-8 rounded hover:bg-green-600 hover:text-white"><i class="fa-brands fa-whatsapp"></i></button><button onclick="apagarProjeto('${p.id}')" class="text-gray-300 hover:text-gray-500 w-8 h-8"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+        }
+        
+        function renderFinanceiro() {
+            const tr = estado.receber.reduce((acc, c) => acc + c.valor, 0); const tp = estado.pagar.reduce((acc, c) => acc + c.valor, 0);
+            document.getElementById('kpi-receber').innerText = formatMoeda(tr); document.getElementById('kpi-pagar').innerText = formatMoeda(tp); document.getElementById('kpi-saldo').innerText = formatMoeda(tr - tp);
+            const tbRec = document.getElementById('lista-receber'); tbRec.innerHTML = '';
+            estado.receber.forEach(r => { const c = r.status==='Pago'?'text-green-600':'text-orange-500'; tbRec.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-2 font-mono">${formatData(r.data_vencimento)}</td><td class="p-2"><div class="font-bold">${r.descricao}</div><div class="text-[10px] text-gray-400">${r.projects?.clients?.full_name||'-'}</div></td><td class="p-2 text-right font-bold">${formatMoeda(r.valor)}</td><td class="p-2 text-center text-[10px] font-bold uppercase cursor-pointer ${c}" onclick="toggleStatusReceber('${r.id}','${r.status}')">${r.status}</td></tr>`; });
+            const tbPag = document.getElementById('lista-pagar'); tbPag.innerHTML = '';
+            estado.pagar.forEach(p => { const c = p.status==='Pago'?'text-green-600':'text-red-500'; tbPag.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-2 font-mono">${formatData(p.data_vencimento)}</td><td class="p-2"><div class="font-bold">${p.descricao}</div><div class="text-[10px] text-gray-400">${p.fornecedores?.nome_empresa||'-'}</div></td><td class="p-2 text-right font-bold">${formatMoeda(p.valor)}</td><td class="p-2 text-center text-[10px] font-bold uppercase cursor-pointer ${c}" onclick="toggleStatusPagar('${p.id}','${p.status}')">${p.status}</td></tr>`; });
+        }
+
+        // Funções de Ação (Mantidas simplificadas)
+        async function salvarProjeto(e) { e.preventDefault(); try { const nome=document.getElementById('proj-nome').value, cpf=document.getElementById('proj-cpf').value, tit=document.getElementById('proj-titulo').value, pra=document.getElementById('proj-prazo').value; let c = await supabaseClient.from('clients').insert([{full_name:nome, cpf}]).select().single(); if(c.error) throw c.error; let p = await supabaseClient.from('projects').insert([{client_id:c.data.id, title:tit, delivery_date:pra, status:'producao'}]).select().single(); await supabaseClient.from('project_steps').insert([{project_id:p.data.id, step_name:'Projeto', display_order:1, is_completed:true, completed_at:new Date()},{project_id:p.data.id, step_name:'Corte', display_order:2},{project_id:p.data.id, step_name:'Pintura', display_order:3},{project_id:p.data.id, step_name:'Montagem', display_order:4}]); document.getElementById('modal-projeto').close(); carregarTudo(); } catch(err){Swal.fire('Erro', 'CPF já existe', 'error')} }
+        async function toggleStep(id,s){await supabaseClient.from('project_steps').update({is_completed:s}).eq('id',id); carregarTudo();}
+        async function apagarProjeto(id){if((await Swal.fire({title:'Apagar?',icon:'warning',showCancelButton:true})).isConfirmed){await supabaseClient.from('projects').delete().eq('id',id);carregarTudo();}}
+        function abrirModalReceita(){const s=document.getElementById('rec-projeto');s.innerHTML='<option value="">Selecione...</option>';estado.projetos.forEach(p=>s.innerHTML+=`<option value="${p.id}">${p.clients.full_name} - ${p.title}</option>`);document.getElementById('modal-receita').showModal();}
+        async function salvarReceita(e){e.preventDefault();await supabaseClient.from('contas_receber').insert([{projeto_id:document.getElementById('rec-projeto').value,descricao:document.getElementById('rec-desc').value,valor:document.getElementById('rec-valor').value,data_vencimento:document.getElementById('rec-data').value}]);document.getElementById('modal-receita').close();carregarTudo();}
+        async function toggleStatusReceber(id,s){await supabaseClient.from('contas_receber').update({status:s==='Pendente'?'Pago':'Pendente'}).eq('id',id);carregarTudo();}
+        function abrirModalDespesa(){const s=document.getElementById('pag-fornecedor');s.innerHTML='<option value="">Selecione...</option>';estado.fornecedores.forEach(f=>s.innerHTML+=`<option value="${f.id}">${f.nome_empresa}</option>`);document.getElementById('modal-despesa').showModal();}
+        async function salvarDespesa(e){e.preventDefault();await supabaseClient.from('contas_pagar').insert([{fornecedor_id:document.getElementById('pag-fornecedor').value,descricao:document.getElementById('pag-desc').value,valor:document.getElementById('pag-valor').value,data_vencimento:document.getElementById('pag-data').value}]);document.getElementById('modal-despesa').close();carregarTudo();}
+        async function toggleStatusPagar(id,s){await supabaseClient.from('contas_pagar').update({status:s==='Pendente'?'Pago':'Pendente'}).eq('id',id);carregarTudo();}
+        async function salvarFornecedor(e){e.preventDefault();await supabaseClient.from('fornecedores').insert([{nome_empresa:document.getElementById('forn-nome').value,categoria:document.getElementById('forn-cat').value}]);document.getElementById('modal-fornecedor').close();carregarTudo();}
+        
+        function triggerUpload(id){projetoUploadId=id;document.getElementById('input-upload').click();}
+        document.getElementById('input-upload').addEventListener('change',async(e)=>{const f=e.target.files[0];if(!f)return;const n=`render-${projetoUploadId}-${Date.now()}.jpg`;await supabaseClient.storage.from('nec-arquivos').upload(n,f);const{data:{publicUrl}}=supabaseClient.storage.from('nec-arquivos').getPublicUrl(n);await supabaseClient.from('projects').update({render_url:publicUrl}).eq('id',projetoUploadId);carregarTudo();});
+        function gerarPDF(id){const p=estado.projetos.find(x=>x.id===id);if(!p)return;const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.setFillColor(17,17,17);doc.rect(0,0,210,40,'F');doc.setTextColor(197,160,89);doc.setFontSize(22);doc.text("NEC PLANEJADOS",20,20);doc.setTextColor(255,255,255);doc.setFontSize(10);doc.text("Relatório Status",20,30);doc.setTextColor(0,0,0);doc.text(`Cliente: ${p.clients.full_name}`,20,60);let y=80;p.project_steps.sort((a,b)=>a.display_order-b.display_order).forEach(s=>{doc.text(`${s.is_completed?'[OK]':'[  ]'} ${s.step_name}`,20,y);y+=10;});doc.save('NEC_Report.pdf');}
+        function enviarZap(n,id){window.open(`https://wa.me/?text=${encodeURIComponent(`Olá ${n}! Acompanhe seu projeto: https://necplanejados.vercel.app/tracker`)}`,'_blank');}
+        const formatMoeda=(v)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+        const formatData=(d)=>new Date(d).toLocaleDateString('pt-BR');
+    </script>
+</body>
+</html>
