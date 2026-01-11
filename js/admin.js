@@ -376,3 +376,19 @@ async function toggleStatusPagar(id,s){
 
 function abrirModalFornecedor(){document.getElementById('modal-fornecedor').showModal();}
 async function salvarFornecedor(e){e.preventDefault();await supabaseClient.from('fornecedores').insert([{nome_empresa:document.getElementById('forn-nome').value,categoria:document.getElementById('forn-cat').value}]);document.getElementById('modal-fornecedor').close();e.target.reset();carregarTudo();}
+// js/admin.js
+
+function toggleSenha() {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('eye-icon');
+
+    if (input.type === "password") {
+        input.type = "text"; // Mostra a senha
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash'); // Ícone de "olho cortado"
+    } else {
+        input.type = "password"; // Esconde a senha
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye'); // Ícone de "olho normal"
+    }
+}
