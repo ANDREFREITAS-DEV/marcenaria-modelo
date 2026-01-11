@@ -30,12 +30,14 @@ async function buscarPedidoReal() {
 
         if (errCli || !cliente) throw new Error('Cliente não encontrado');
 
+        // --- CORREÇÃO DE BUG: Verificar se existem projetos antes de ordenar ---
+        if (!cliente.projects || cliente.projects.length === 0) {
+             throw new Error('Nenhum projeto ativo para este cliente.');
+        }
+
         // 2. Pega o projeto mais recente
-        // Ordena por data de criação (do mais novo para o mais velho) e pega o primeiro [0]
         const projeto = cliente.projects.sort((a,b) => new Date(b.created_at) - new Date(a.created_at))[0];
-
-        if (!projeto) throw new Error('Nenhum projeto ativo.');
-
+        
         // 3. Preencher Dados na Tela
         document.getElementById('cliente-nome').innerText = cliente.full_name;
         document.getElementById('projeto-titulo').innerText = projeto.title;
@@ -50,7 +52,7 @@ async function buscarPedidoReal() {
         }
 
         // 4. Renderizar Timeline (Bolinhas)
-        const steps = projeto.project_steps.sort((a,b) => a.display_order - b.display_order);
+        const steps = projeto.project_steps ? projeto.project_steps.sort((a,b) => a.display_order - b.display_order) : [];
         let timelineHTML = '';
         
         steps.forEach(step => {
@@ -78,7 +80,11 @@ async function buscarPedidoReal() {
 
     } catch (error) {
         console.error(error);
-        Utils.notify.error('CPF não encontrado ou sem contratos ativos.');
+        const msg = error.message === 'Cliente não encontrado' || error.message === 'Nenhum projeto ativo para este cliente.' 
+            ? error.message 
+            : 'CPF não encontrado ou erro no sistema.';
+        
+        Utils.notify.error(msg);
         imgDiv.classList.remove('hidden');
         resultDiv.classList.add('hidden');
     } finally {
@@ -122,8 +128,6 @@ function iniciarCarrossel() {
 
     setInterval(nextVideo, duration);
 }
-
-// js/tracking.js (Adicione no final do arquivo)
 
 // --- ENVIO DE LEAD (COMERCIAL) ---
 async function enviarLead(e) {
