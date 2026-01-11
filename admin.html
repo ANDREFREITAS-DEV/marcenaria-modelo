@@ -10,20 +10,46 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // ADICIONADA A COR 'modelo-bordo'
         tailwind.config = { theme: { extend: { colors: { nec: { dark: '#111111', gold: '#C5A059' }, modelo: { bordo: '#800000' } } } } }
     </script>
+
+    <!-- ✅ REMOVIDO: o <nav> que estava indevidamente dentro do <head> (causava duplicação) -->
 </head>
+
 <body class="bg-gray-100 font-sans text-sm h-screen flex flex-col overflow-hidden">
 
     <div id="auth-screen" class="fixed inset-0 bg-nec-dark z-[9999] flex items-center justify-center">
         <div class="bg-white p-8 rounded shadow-2xl w-96 text-center border-t-4 border-modelo-bordo">
             <img src="assets/logo.png" alt="Marcenaria Modelo" class="h-24 mx-auto mb-4">
             <p class="text-gray-500 mb-6 uppercase tracking-widest text-xs font-bold">Acesso Restrito ERP</p>
+
             <form onsubmit="fazerLogin(event)" class="space-y-4">
                 <input type="email" id="email" placeholder="E-mail" class="w-full border p-3 rounded outline-none focus:border-modelo-bordo" required>
-                <input type="password" id="password" placeholder="Senha" class="w-full border p-3 rounded outline-none focus:border-modelo-bordo" required>
+
+                <!-- ✅ AJUSTE 2: Campo senha com botão “visualizar” -->
+                <div class="relative">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Senha"
+                        class="w-full border p-3 rounded outline-none focus:border-modelo-bordo pr-12"
+                        required
+                    >
+                    <button
+                        type="button"
+                        onclick="toggleSenha()"
+                        class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-modelo-bordo transition-colors"
+                        aria-label="Mostrar/ocultar senha"
+                        title="Mostrar/ocultar senha"
+                    >
+                        <i id="icon-senha" class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
                 <button type="submit" id="btn-login" class="w-full bg-modelo-bordo text-white font-bold py-3 rounded hover:bg-black transition-colors uppercase tracking-widest">ENTRAR</button>
             </form>
+
             <p id="error-msg" class="text-red-500 text-xs mt-4 hidden"></p>
         </div>
     </div>
@@ -32,12 +58,15 @@
         <header class="bg-white text-nec-dark px-6 py-3 flex justify-between items-center shadow-md z-10 border-b border-modelo-bordo/20">
             <div class="flex items-center gap-6">
                 <img src="assets/logo.png" alt="Marcenaria Modelo" class="h-12">
+
+                <!-- ✅ MANTIDO: este é o menu correto (único) -->
                 <nav class="flex space-x-1 bg-gray-100 rounded p-1">
-                     <button onclick="mudarAba('comercial')" id="tab-comercial" class="px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-gray-200 transition-all text-gray-600">Comercial</button>
-                    <button onclick="mudarAba('producao')" id="tab-producao" class="px-4 py-1.5 rounded font-bold text-xs uppercase bg-modelo-bordo text-white transition-all">Produção</button>
-                    <button onclick="mudarAba('financeiro')" id="tab-financeiro" class="px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-gray-200 transition-all text-gray-600">Financeiro</button>
+                    <button onclick="mudarAba('comercial')" id="tab-comercial" class="px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-gray-200 text-gray-600 transition-all">Comercial</button>
+                    <button onclick="mudarAba('producao')" id="tab-producao" class="px-4 py-1.5 rounded font-bold text-xs uppercase bg-modelo-bordo text-white shadow transition-all">Produção</button>
+                    <button onclick="mudarAba('financeiro')" id="tab-financeiro" class="px-4 py-1.5 rounded font-bold text-xs uppercase hover:bg-gray-200 text-gray-600 transition-all">Financeiro</button>
                 </nav>
             </div>
+
             <button onclick="fazerLogout()" class="text-xs text-gray-500 hover:text-modelo-bordo flex items-center gap-2 font-bold uppercase"><i class="fa-solid fa-right-from-bracket"></i> SAIR</button>
         </header>
 
@@ -45,46 +74,178 @@
 
             <div id="view-comercial" class="hidden space-y-6 max-w-7xl mx-auto">
                 <div class="flex justify-between items-center">
-                    <div><h2 class="text-2xl font-bold text-gray-800">Pipeline de Vendas</h2><p class="text-xs text-gray-500">Novos contatos do site.</p></div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Pipeline de Vendas</h2>
+                        <p class="text-xs text-gray-500">Novos contatos do site.</p>
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="lista-leads"></div>
                 <div id="empty-leads" class="hidden p-20 text-center text-gray-400">Nenhum novo contato pendente.</div>
             </div>
 
             <div id="view-producao" class="space-y-6 max-w-7xl mx-auto">
                 <div class="flex justify-between items-center">
-                    <div><h2 class="text-2xl font-bold text-modelo-bordo">Painel de Produção</h2><p class="text-xs text-gray-500">Gestão de contratos e chão de fábrica.</p></div>
-                    <button onclick="document.getElementById('modal-projeto').showModal()" class="bg-modelo-bordo text-white px-4 py-2 rounded font-bold shadow flex items-center gap-2 hover:bg-black transition-colors uppercase text-xs tracking-wider"><i class="fa-solid fa-plus"></i> Novo Contrato</button>
+                    <div>
+                        <h2 class="text-2xl font-bold text-modelo-bordo">Painel de Produção</h2>
+                        <p class="text-xs text-gray-500">Gestão de contratos e chão de fábrica.</p>
+                    </div>
+                    <button onclick="document.getElementById('modal-projeto').showModal()" class="bg-modelo-bordo text-white px-4 py-2 rounded font-bold shadow flex items-center gap-2 hover:bg-black transition-colors uppercase text-xs tracking-wider">
+                        <i class="fa-solid fa-plus"></i> Novo Contrato
+                    </button>
                 </div>
+
                 <div class="bg-white rounded shadow overflow-hidden border-t-2 border-modelo-bordo">
-                    <table class="w-full text-left"><thead class="bg-gray-50 text-gray-600 uppercase text-xs font-bold border-b"><tr><th class="p-4 w-24">CPF</th><th class="p-4">Projeto</th><th class="p-4">Timeline (Clique p/ Atualizar)</th><th class="p-4 text-center">Status</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="lista-projetos"></tbody></table>
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-600 uppercase text-xs font-bold border-b">
+                            <tr>
+                                <th class="p-4 w-24">CPF</th>
+                                <th class="p-4">Projeto</th>
+                                <th class="p-4">Timeline (Clique p/ Atualizar)</th>
+                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-projetos"></tbody>
+                    </table>
                     <div id="empty-projetos" class="hidden p-10 text-center text-gray-400">Nenhum contrato ativo.</div>
                 </div>
             </div>
 
             <div id="view-financeiro" class="hidden space-y-6 max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded shadow border-l-4 border-green-500"><p class="text-xs font-bold text-gray-400 uppercase">A Receber</p><h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-receber">R$ 0,00</h3></div>
-                    <div class="bg-white p-6 rounded shadow border-l-4 border-red-500"><p class="text-xs font-bold text-gray-400 uppercase">A Pagar</p><h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-pagar">R$ 0,00</h3></div>
-                    <div class="bg-nec-dark text-white p-6 rounded shadow border-l-4 border-nec-gold"><p class="text-xs font-bold text-gray-400 uppercase">Saldo</p><h3 class="text-2xl font-bold text-nec-gold mt-1" id="kpi-saldo">R$ 0,00</h3></div>
+                    <div class="bg-white p-6 rounded shadow border-l-4 border-green-500">
+                        <p class="text-xs font-bold text-gray-400 uppercase">A Receber</p>
+                        <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-receber">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded shadow border-l-4 border-red-500">
+                        <p class="text-xs font-bold text-gray-400 uppercase">A Pagar</p>
+                        <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpi-pagar">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-nec-dark text-white p-6 rounded shadow border-l-4 border-nec-gold">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Saldo</p>
+                        <h3 class="text-2xl font-bold text-nec-gold mt-1" id="kpi-saldo">R$ 0,00</h3>
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded shadow flex flex-col h-[500px] border-t-2 border-green-500"><div class="p-4 border-b flex justify-between bg-gray-50"><h3 class="font-bold text-green-700">Receber</h3><button onclick="abrirModalReceita()" class="text-xs bg-green-500 text-white px-3 py-1 rounded font-bold uppercase">+ Receita</button></div><div class="overflow-auto flex-1 p-2"><table class="w-full text-left text-xs"><tbody id="lista-receber"></tbody></table></div></div>
-                    <div class="bg-white rounded shadow flex flex-col h-[500px] border-t-2 border-red-500"><div class="p-4 border-b flex justify-between bg-gray-50"><h3 class="font-bold text-red-700">Pagar</h3><div><button onclick="document.getElementById('modal-fornecedor').showModal()" class="text-xs bg-gray-200 px-3 py-1 rounded font-bold mr-2 uppercase text-gray-600">Fornecedores</button><button onclick="abrirModalDespesa()" class="text-xs bg-red-500 text-white px-3 py-1 rounded font-bold uppercase">+ Despesa</button></div></div><div class="overflow-auto flex-1 p-2"><table class="w-full text-left text-xs"><tbody id="lista-pagar"></tbody></table></div></div>
+                    <div class="bg-white rounded shadow flex flex-col h-[500px] border-t-2 border-green-500">
+                        <div class="p-4 border-b flex justify-between bg-gray-50">
+                            <h3 class="font-bold text-green-700">Receber</h3>
+                            <button onclick="abrirModalReceita()" class="text-xs bg-green-500 text-white px-3 py-1 rounded font-bold uppercase">+ Receita</button>
+                        </div>
+                        <div class="overflow-auto flex-1 p-2">
+                            <table class="w-full text-left text-xs">
+                                <tbody id="lista-receber"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded shadow flex flex-col h-[500px] border-t-2 border-red-500">
+                        <div class="p-4 border-b flex justify-between bg-gray-50">
+                            <h3 class="font-bold text-red-700">Pagar</h3>
+                            <div>
+                                <button onclick="document.getElementById('modal-fornecedor').showModal()" class="text-xs bg-gray-200 px-3 py-1 rounded font-bold mr-2 uppercase text-gray-600">Fornecedores</button>
+                                <button onclick="abrirModalDespesa()" class="text-xs bg-red-500 text-white px-3 py-1 rounded font-bold uppercase">+ Despesa</button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto flex-1 p-2">
+                            <table class="w-full text-left text-xs">
+                                <tbody id="lista-pagar"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- ✅ Mantido: input usado pelo admin.js -->
     <input type="file" id="input-upload" class="hidden" accept="image/*">
 
-    <dialog id="modal-projeto" class="p-0 rounded w-full max-w-lg backdrop:bg-black/80"><div class="bg-modelo-bordo text-white p-4 flex justify-between"><h3 class="font-bold uppercase tracking-wider">Novo Contrato</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarProjeto(event)" class="p-6 space-y-4 bg-white"><input id="proj-nome" required placeholder="Nome Cliente" class="w-full border p-2 focus:border-modelo-bordo outline-none"><input id="proj-whatsapp" required placeholder="WhatsApp (5518999999999)" class="w-full border p-2 focus:border-modelo-bordo outline-none"><div class="grid grid-cols-2 gap-4"><input id="proj-cpf" required placeholder="CPF" class="w-full border p-2 focus:border-modelo-bordo outline-none"><input type="date" id="proj-prazo" required class="w-full border p-2 focus:border-modelo-bordo outline-none"></div><input id="proj-titulo" required placeholder="Título do Projeto" class="w-full border p-2 focus:border-modelo-bordo outline-none"><button class="w-full bg-modelo-bordo text-white font-bold py-3 rounded hover:bg-black transition-colors uppercase tracking-widest">CRIAR</button></form></dialog>
-    <dialog id="modal-receita" class="p-0 rounded w-full max-w-md backdrop:bg-black/80"><div class="bg-green-600 text-white p-4 flex justify-between"><h3 class="font-bold uppercase">Nova Receita</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarReceita(event)" class="p-6 space-y-4 bg-white"><select id="rec-projeto" required class="w-full border p-2 bg-white"></select><input id="rec-desc" placeholder="Descrição" class="w-full border p-2"><div class="grid grid-cols-2 gap-4"><input type="number" step="0.01" id="rec-valor" placeholder="R$" class="w-full border p-2"><input type="date" id="rec-data" required class="w-full border p-2"></div><button class="w-full bg-green-600 text-white font-bold py-3 rounded uppercase">SALVAR</button></form></dialog>
-    <dialog id="modal-despesa" class="p-0 rounded w-full max-w-md backdrop:bg-black/80"><div class="bg-red-600 text-white p-4 flex justify-between"><h3 class="font-bold uppercase">Nova Despesa</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarDespesa(event)" class="p-6 space-y-4 bg-white"><select id="pag-fornecedor" required class="w-full border p-2 bg-white"></select><input id="pag-desc" placeholder="Descrição" class="w-full border p-2"><div class="grid grid-cols-2 gap-4"><input type="number" step="0.01" id="pag-valor" placeholder="R$" class="w-full border p-2"><input type="date" id="pag-data" required class="w-full border p-2"></div><button class="w-full bg-red-600 text-white font-bold py-3 rounded uppercase">SALVAR</button></form></dialog>
-    <dialog id="modal-fornecedor" class="p-0 rounded w-full max-w-sm backdrop:bg-black/80"><div class="bg-gray-800 text-white p-4 flex justify-between"><h3 class="font-bold uppercase">Fornecedor</h3><button onclick="this.closest('dialog').close()">&times;</button></div><form onsubmit="salvarFornecedor(event)" class="p-6 space-y-4 bg-white"><input id="forn-nome" required placeholder="Empresa" class="w-full border p-2"><input id="forn-cat" placeholder="Categoria" class="w-full border p-2"><button class="w-full bg-gray-800 text-white font-bold py-3 rounded uppercase">CADASTRAR</button></form></dialog>
+    <!-- ✅ Mantidos: modais usados pelo admin.js -->
+    <dialog id="modal-projeto" class="p-0 rounded w-full max-w-lg backdrop:bg-black/80">
+        <div class="bg-modelo-bordo text-white p-4 flex justify-between">
+            <h3 class="font-bold uppercase tracking-wider">Novo Contrato</h3>
+            <button onclick="this.closest('dialog').close()">&times;</button>
+        </div>
+        <form onsubmit="salvarProjeto(event)" class="p-6 space-y-4 bg-white">
+            <input id="proj-nome" required placeholder="Nome Cliente" class="w-full border p-2 focus:border-modelo-bordo outline-none">
+            <input id="proj-whatsapp" required placeholder="WhatsApp (5518999999999)" class="w-full border p-2 focus:border-modelo-bordo outline-none">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="proj-cpf" required placeholder="CPF" class="w-full border p-2 focus:border-modelo-bordo outline-none">
+                <input type="date" id="proj-prazo" required class="w-full border p-2 focus:border-modelo-bordo outline-none">
+            </div>
+            <input id="proj-titulo" required placeholder="Título do Projeto" class="w-full border p-2 focus:border-modelo-bordo outline-none">
+            <button class="w-full bg-modelo-bordo text-white font-bold py-3 rounded hover:bg-black transition-colors uppercase tracking-widest">CRIAR</button>
+        </form>
+    </dialog>
+
+    <dialog id="modal-receita" class="p-0 rounded w-full max-w-md backdrop:bg-black/80">
+        <div class="bg-green-600 text-white p-4 flex justify-between">
+            <h3 class="font-bold uppercase">Nova Receita</h3>
+            <button onclick="this.closest('dialog').close()">&times;</button>
+        </div>
+        <form onsubmit="salvarReceita(event)" class="p-6 space-y-4 bg-white">
+            <select id="rec-projeto" required class="w-full border p-2 bg-white"></select>
+            <input id="rec-desc" placeholder="Descrição" class="w-full border p-2">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="number" step="0.01" id="rec-valor" placeholder="R$" class="w-full border p-2">
+                <input type="date" id="rec-data" required class="w-full border p-2">
+            </div>
+            <button class="w-full bg-green-600 text-white font-bold py-3 rounded uppercase">SALVAR</button>
+        </form>
+    </dialog>
+
+    <dialog id="modal-despesa" class="p-0 rounded w-full max-w-md backdrop:bg-black/80">
+        <div class="bg-red-600 text-white p-4 flex justify-between">
+            <h3 class="font-bold uppercase">Nova Despesa</h3>
+            <button onclick="this.closest('dialog').close()">&times;</button>
+        </div>
+        <form onsubmit="salvarDespesa(event)" class="p-6 space-y-4 bg-white">
+            <select id="pag-fornecedor" required class="w-full border p-2 bg-white"></select>
+            <input id="pag-desc" placeholder="Descrição" class="w-full border p-2">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="number" step="0.01" id="pag-valor" placeholder="R$" class="w-full border p-2">
+                <input type="date" id="pag-data" required class="w-full border p-2">
+            </div>
+            <button class="w-full bg-red-600 text-white font-bold py-3 rounded uppercase">SALVAR</button>
+        </form>
+    </dialog>
+
+    <dialog id="modal-fornecedor" class="p-0 rounded w-full max-w-sm backdrop:bg-black/80">
+        <div class="bg-gray-800 text-white p-4 flex justify-between">
+            <h3 class="font-bold uppercase">Fornecedor</h3>
+            <button onclick="this.closest('dialog').close()">&times;</button>
+        </div>
+        <form onsubmit="salvarFornecedor(event)" class="p-6 space-y-4 bg-white">
+            <input id="forn-nome" required placeholder="Empresa" class="w-full border p-2">
+            <input id="forn-cat" placeholder="Categoria" class="w-full border p-2">
+            <button class="w-full bg-gray-800 text-white font-bold py-3 rounded uppercase">CADASTRAR</button>
+        </form>
+    </dialog>
 
     <script src="js/supabaseClient.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/admin.js"></script>
+
+    <!-- ✅ AJUSTE 2: JS do “olhinho” -->
+    <script>
+        function toggleSenha() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('icon-senha');
+            if (!input || !icon) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>
