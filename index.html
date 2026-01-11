@@ -11,8 +11,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ADICIONADA A COR 'modelo-bordo'
-        tailwind.config = { theme: { extend: { colors: { nec: { dark: '#111111', gold: '#C5A059', gray: '#F8F8F8', charcoal: '#1F2937' }, modelo: { bordo: '#800000' } }, fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] } } } }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nec: {
+                            dark: '#111111',
+                            gold: '#C5A059',
+                            gray: '#F8F8F8',
+                            charcoal: '#1F2937'
+                        },
+                        modelo: {
+                            bordo: '#800000'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
     </script>
     <style>
         .video-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
@@ -32,7 +51,7 @@
         .gallery-item:hover .gallery-overlay { opacity: 1; }
 
         /* =========================================================
-           NOVO: MENU COM DEGRADÊ ESCURO (quando rolar a página)
+           MENU COM DEGRADÊ ESCURO (quando rolar a página)
            ========================================================= */
         #navbar.scrolled {
             background: linear-gradient(
@@ -46,7 +65,7 @@
         }
 
         /* =========================================================
-           NOVO: EFEITO PREMIUM PARA IMAGENS (DONO / ARQUITETA)
+           EFEITO PREMIUM PARA IMAGENS (DONO / ARQUITETA)
            - Sempre colorida (sem grayscale)
            - Hover premium (zoom suave + contraste + luz)
            ========================================================= */
@@ -96,7 +115,7 @@
 
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 lg:px-12 bg-transparent text-white border-b border-white/10 hover:bg-nec-dark/95 hover:backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#"><img src="assets/logo.png" alt="Marcenaria Modelo" class="h-16 group hover:opacity-90 transition-opacity"></a>
+            <a href="#"><img src="assets/logo.webp" alt="Marcenaria Modelo" class="h-16 group hover:opacity-90 transition-opacity"></a>
 
             <div class="hidden lg:flex gap-8 items-center text-sm font-medium tracking-wide uppercase">
                 <a href="#home" class="hover:text-nec-gold transition-colors">Home</a>
@@ -115,14 +134,14 @@
 
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-black">
         <div class="absolute inset-0 z-0">
-            <video autoplay muted loop playsinline class="video-slide active"><source src="assets/video1.mp4" type="video/mp4"></video>
-            <video autoplay muted loop playsinline class="video-slide"><source src="assets/video2.mp4" type="video/mp4"></video>
-            <video autoplay muted loop playsinline class="video-slide"><source src="assets/video3.mp4" type="video/mp4"></video>
+            <!-- VÍDEO ÚNICO (otimizado para mobile) -->
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/video-poster.webp" class="w-full h-full object-cover">
+                <source src="assets/video1.mp4" type="video/mp4">
+            </video>
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/30 to-black/80 z-10"></div>
-        <div class="absolute bottom-0 left-0 h-1 bg-white/20 z-20 w-full"><div id="progress-bar" class="h-full bg-nec-gold w-0"></div></div>
         <div class="relative z-20 text-center text-white px-4 max-w-5xl mx-auto" data-aos="fade-up">
-            <img src="assets/logo.png" alt="Marcenaria Modelo" class="h-32 mx-auto mb-8 drop-shadow-2xl">
+            <img src="assets/logo.webp" alt="Marcenaria Modelo" class="h-32 mx-auto mb-8 drop-shadow-2xl" loading="eager">
             <h1 class="font-serif text-5xl lg:text-7xl mb-6 leading-tight drop-shadow-2xl">A Excelência da Arquitetura.<br><span class="italic font-light text-nec-gold">A Precisão da Indústria.</span></h1>
             <p class="text-lg text-gray-200 mb-10 font-light max-w-2xl mx-auto leading-relaxed">Móveis planejados de alto padrão. Onde a tradição da marcenaria encontra a inovação do design.</p>
             <div class="flex flex-col sm:flex-row gap-5 justify-center">
@@ -182,12 +201,10 @@
                 </div>
             </div>
 
-            <!-- ALTERADO: sem grayscale + efeito premium + nome/cargo -->
             <div class="relative premium-photo" data-aos="fade-left">
                 <div class="absolute -bottom-6 -right-6 w-full h-full border-4 border-modelo-bordo z-0 hidden lg:block"></div>
-                <img src="assets/dono.png" alt="Val - Fundador e Proprietário" class="relative z-10 w-full h-[500px] object-cover shadow-2xl">
+                <img src="assets/dono.webp" alt="Val - Fundador e Proprietário" class="relative z-10 w-full h-[500px] object-cover shadow-2xl" loading="lazy">
 
-                <!-- NOVO: Caixa nome/cargo do dono -->
                 <div class="absolute bottom-8 left-8 bg-white p-4 shadow-lg z-20 border-l-4 border-modelo-bordo">
                     <p class="font-serif text-2xl text-nec-dark font-bold">Val</p>
                     <p class="text-xs uppercase tracking-widest text-gray-500">Fundador e Proprietário</p>
@@ -198,10 +215,9 @@
 
     <section id="arquiteta" class="py-24 bg-nec-gray">
         <div class="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
-            <!-- ALTERADO: sem grayscale + efeito premium (mantém caixa existente) -->
             <div class="relative premium-photo lg:order-1 order-2" data-aos="fade-right">
                 <div class="absolute -top-6 -left-6 w-full h-full border-4 border-nec-gold z-0 hidden lg:block"></div>
-                <img src="assets/arquiteta.png" alt="Arquiteta Maria Antonieta" class="relative z-10 w-full h-[500px] object-cover shadow-2xl">
+                <img src="assets/arquiteta.webp" alt="Arquiteta Maria Antonieta" class="relative z-10 w-full h-[500px] object-cover shadow-2xl" loading="lazy">
                 <div class="absolute bottom-8 right-8 bg-white p-4 shadow-lg z-20 border-l-4 border-nec-gold">
                     <p class="font-serif text-2xl text-nec-dark font-bold">Maria Antonieta</p>
                     <p class="text-xs uppercase tracking-widest text-gray-500">Arquiteta Responsável</p>
@@ -230,12 +246,12 @@
             <h2 class="font-serif text-4xllg:text-5xl mt-4">Obras que Assinamos.</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4" data-aos="fade-up">
-            <div class="gallery-item h-80"><img src="assets/projeto1.png" class="w-full h-full object-cover"><div class="gallery-overlay">Cozinhas Gourmet</div></div>
-            <div class="gallery-item h-80"><img src="assets/projeto2.png" class="w-full h-full object-cover"><div class="gallery-overlay">Suítes Master</div></div>
-            <div class="gallery-item h-80"><img src="assets/projeto3.png" class="w-full h-full object-cover"><div class="gallery-overlay">Home Theater</div></div>
-            <div class="gallery-item h-80"><img src="assets/projeto4.png" class="w-full h-full object-cover"><div class="gallery-overlay">Áreas Externas</div></div>
-            <div class="gallery-item h-80"><img src="assets/projeto5.png" class="w-full h-full object-cover"><div class="gallery-overlay">Banheiros de Luxo</div></div>
-            <div class="gallery-item h-80"><img src="assets/projeto6.png" class="w-full h-full object-cover"><div class="gallery-overlay">Corporativo</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto1.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Cozinhas Gourmet</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto2.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Suítes Master</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto3.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Home Theater</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto4.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Áreas Externas</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto5.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Banheiros de Luxo</div></div>
+            <div class="gallery-item h-80"><img src="assets/projeto6.webp" class="w-full h-full object-cover" loading="lazy"><div class="gallery-overlay">Corporativo</div></div>
         </div>
     </section>
 
@@ -244,51 +260,65 @@
             <span class="text-modelo-bordo font-bold tracking-widest uppercase text-sm">Nossa Força</span>
             <h2 class="font-serif text-4xl mt-4 mb-8 text-nec-dark">Mãos que Constroem.</h2>
             <p class="text-gray-600 text-lg leading-relaxed mb-12">Por trás de cada projeto entregue, existe uma equipe de marceneiros, montadores e acabadores dedicados à perfeição. A Marcenaria Modelo é feita de pessoas apaixonadas pelo que fazem.</p>
-            <img src="assets/equipe.png" alt="Equipe Marcenaria Modelo" class="w-full max-w-xl mx-auto rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 border-b-4 border-modelo-bordo">
+            <img src="assets/equipe.webp" alt="Equipe Marcenaria Modelo" class="w-full max-w-xl mx-auto rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 border-b-4 border-modelo-bordo" loading="lazy">
         </div>
     </section>
 
-    <!-- OBS: seu HTML original não tem a <section id="contato">, mas mantém o form e a função enviarLead(). Mantive exatamente como está. -->
-    <div class="bg-white p-8 shadow-2xl rounded-sm border-t-4 border-modelo-bordo" data-aos="fade-left">
-        <form id="form-contato" onsubmit="enviarLead(event)" class="space-y-6">
-            <div>
-                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
-                <input type="text" id="lead-nome" required class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">WhatsApp (Com DDD)</label>
-                    <input type="tel" id="lead-zap" required placeholder="Ex: 18999999999" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ambiente de Interesse</label>
-                    <select id="lead-ambiente" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors bg-white">
-                        <option>Cozinha Planejada</option>
-                        <option>Dormitório / Closet</option>
-                        <option>Home Theater / Sala</option>
-                        <option>Banheiros</option>
-                        <option>Corporativo / Escritório</option>
-                        <option>Casa Completa</option>
-                    </select>
+    <section id="contato" class="py-24 bg-nec-gray">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-right">
+                <span class="text-modelo-bordo font-bold tracking-widest uppercase text-sm">Orçamento</span>
+                <h2 class="font-serif text-4xl lg:text-5xl text-nec-dark mt-4 mb-6">Vamos conversar sobre seu projeto.</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mb-6">Envie seu contato e nossa equipe retornará o mais rápido possível com orientações e próximos passos.</p>
+                <div class="space-y-3 text-gray-700">
+                    <p><i class="fa-brands fa-whatsapp text-modelo-bordo mr-2"></i> 18 99777-7079</p>
+                    <p><i class="fa-solid fa-phone text-modelo-bordo mr-2"></i> 18 3722-0000</p>
+                    <p><i class="fa-solid fa-envelope text-modelo-bordo mr-2"></i> contato@marcenariamodelo.com.br</p>
                 </div>
             </div>
 
-            <div>
-                <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagem (Opcional)</label>
-                <textarea id="lead-msg" rows="2" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors resize-none"></textarea>
-            </div>
+            <div class="bg-white p-8 shadow-2xl rounded-sm border-t-4 border-modelo-bordo" data-aos="fade-left">
+                <form id="form-contato" onsubmit="enviarLead(event)" class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Nome Completo</label>
+                        <input type="text" id="lead-nome" required class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
+                    </div>
 
-            <button type="submit" id="btn-enviar" class="w-full bg-modelo-bordo text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-lg rounded-sm text-sm">
-                Solicitar Orçamento
-            </button>
-        </form>
-    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">WhatsApp (Com DDD)</label>
+                            <input type="tel" id="lead-zap" required placeholder="Ex: 18999999999" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ambiente de Interesse</label>
+                            <select id="lead-ambiente" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors bg-white">
+                                <option>Cozinha Planejada</option>
+                                <option>Dormitório / Closet</option>
+                                <option>Home Theater / Sala</option>
+                                <option>Banheiros</option>
+                                <option>Corporativo / Escritório</option>
+                                <option>Casa Completa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagem (Opcional)</label>
+                        <textarea id="lead-msg" rows="2" class="w-full border-b-2 border-gray-200 py-3 focus:border-modelo-bordo outline-none transition-colors resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="btn-enviar" class="w-full bg-modelo-bordo text-white py-4 font-bold uppercase tracking-[0.2em] hover:bg-black transition-colors shadow-lg rounded-sm text-sm">
+                        Solicitar Orçamento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
 
     <footer class="bg-black text-white pt-20 pb-10 border-t border-white/10">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
             <div>
-                <img src="assets/logo.png" alt="Marcenaria Modelo" class="h-20 mx-auto md:mx-0 mb-6 opacity-80">
+                <img src="assets/logo.webp" alt="Marcenaria Modelo" class="h-20 mx-auto md:mx-0 mb-6 opacity-80">
                 <p class="text-gray-400 text-sm leading-relaxed">Tradição e tecnologia na fabricação de móveis planejados de alto padrão em Andradina e região.</p>
             </div>
             <div>
@@ -318,7 +348,6 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({duration: 800, once: true});</script>
 
-    <!-- NOVO: listener para aplicar o degradê no menu conforme scroll -->
     <script>
         (function () {
             const navbar = document.getElementById('navbar');
@@ -330,7 +359,7 @@
             };
 
             window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll(); // aplica imediatamente ao carregar
+            onScroll();
         })();
     </script>
 
