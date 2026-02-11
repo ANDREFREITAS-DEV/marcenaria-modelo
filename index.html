@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Marcenaria Modelo | Móveis Planejados Premium</title>
+
+  <!-- CSS Premium Local -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fonte Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap"
+  />
+
+  <meta name="description"
+    content="Móveis planejados premium em Andradina-SP. Luxo, pontualidade e entrega garantida em até 45 dias."
+  />
+
+  <link rel="icon" href="./assets/favicon.png" />
+
+
+  <!-- SEO + OpenGraph PREMIUM -->
+
+<meta name="description"
+  content="Móveis planejados premium em Andradina-SP. Luxo, pontualidade e entrega garantida em até 45 dias." />
+
+<!-- OpenGraph WhatsApp / Facebook -->
+<meta property="og:title" content="Marcenaria Modelo | Móveis Planejados Premium" />
+<meta property="og:description"
+  content="Projetos exclusivos em Andradina-SP. Acabamento artesanal, alto padrão e entrega garantida em até 45 dias." />
+<meta property="og:image" content="https://https://marcenaria.usezapflow.com.br/assets/og.webp" />
+<meta property="og:url" content="https://https://marcenaria.usezapflow.com.br/" />
+<meta property="og:type" content="website" />
+
+<!-- Twitter Preview -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Marcenaria Modelo | Alto Padrão" />
+<meta name="twitter:description"
+  content="Móveis planejados sob medida com luxo e pontualidade." />
+<meta name="twitter:image" content="https://marcenaria.usezapflow.com.br/assets/og.webp" />
+
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    
+
+    <div class="logo-area">
+      <img src="./assets/logo.svg" alt="Marcenaria Modelo Logo" class="logo-img">
+      <span class="logo-text">Marcenaria Modelo</span>
+    </div>
+
+
+    <nav>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+
+    <a class="btn-whatsapp"
+      href="https://wa.me/5518997777079"
+      target="_blank">
+      WhatsApp
+    </a>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <img id="heroImage" src="./assets/hero1.webp" alt="Móveis Planejados">
+
+    <div class="hero-content">
+      <h2>
+        Móveis Planejados<br>
+        de Alto Padrão
+      </h2>
+
+      <p>
+        Projetos exclusivos em Andradina-SP com acabamento artesanal,
+        materiais premium e entrega garantida em até <b>45 dias</b>.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#portfolio" class="btn-primary">Ver Projetos</a>
+        <a href="https://wa.me/5518997777079" target="_blank" class="btn-outline">
+          Solicitar Orçamento
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFÓLIO -->
+  <section id="portfolio" class="section">
+    <div class="section-title">
+      <h2>Portfólio Premium</h2>
+      <p>Alguns dos nossos projetos mais recentes em móveis planejados.</p>
+    </div>
+
+    <div class="grid">
+      <!-- 18 imagens -->
+      <script>
+        for (let i = 1; i <= 18; i++) {
+          document.write(`
+            <img src="./assets/portfolio${i}.webp"
+                 onclick="openLightbox(this.src)">
+          `);
+        }
+      </script>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg">
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- FUNDADOR PREMIUM -->
+  <section class="bg-white-section">
+    <div class="founder-section">
+
+
+      <div class="founder-text">
+        <span class="mini-title">TRADIÇÃO & CONFIANÇA</span>
+
+        <h2>O Legado da Marcenaria Modelo.</h2>
+
+        <p>
+          Há anos transformando sonhos em realidade em Andradina e região.
+          Nossa fundação se baseia na honestidade, na qualidade inegociável
+          dos materiais e no compromisso absoluto com os prazos.
+        </p>
+
+        <p class="quote">
+          “Não vendemos apenas móveis, entregamos a certeza de um lar
+          feito sob medida para sua família.”
+        </p>
+
+        <div class="signature">
+          <div class="line"></div>
+          <span>FUNDADOR</span>
+        </div>
+      </div>
+
+      <div class="founder-photo">
+        <img src="./assets/dono.webp" alt="Val - Fundador">
+
+        <div class="founder-label">
+          <h3>Val</h3>
+          <span>Fundador e Proprietário</span>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  <div class="section-divider"></div>
+  <section class="bg-gray-section">
+
+  <!-- ARQUITETA PREMIUM -->
+  <section class="bg-gray-section">
+    <div class="architect-section">
+
+
+      <!-- FOTO -->
+      <div class="architect-photo">
+        <img src="./assets/arquiteta.webp" alt="Maria Antonieta - Arquiteta">
+
+        <div class="architect-label">
+          <h3>Maria Antonieta</h3>
+          <span>Arquiteta Responsável</span>
+        </div>
+      </div>
+
+      <!-- TEXTO -->
+      <div class="architect-text">
+        <span class="mini-title gold">CURADORIA DE DESIGN</span>
+
+        <h2>O olhar que transforma ambientes.</h2>
+
+        <p>
+          Sob a curadoria técnica de <b>Maria Antonieta</b>, cada projeto da
+          Marcenaria Modelo une a robustez da indústria com a leveza do
+          design contemporâneo.
+        </p>
+
+        <!-- BOX DIFERENCIAIS -->
+        <div class="architect-box">
+          <h4>DIFERENCIAIS TÉCNICOS:</h4>
+
+          <ul>
+            <li>✔ Ergonomia e Fluxo de Uso</li>
+            <li>✔ Combinação de Texturas (Laca, Madeira, Vidro)</li>
+            <li>✔ Iluminação LED Integrada</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="bg-gray-section"></section>
+  <!-- EQUIPE PREMIUM CENTRAL -->
+  <section class="bg-white-section">
+    <div class="team-force">
+
+
+      <span class="mini-title red">NOSSA FORÇA</span>
+
+      <h2>Mãos que Constroem.</h2>
+
+      <p>
+        Por trás de cada projeto entregue, existe uma equipe de marceneiros,
+        montadores e acabadores dedicados à perfeição.
+        A Marcenaria Modelo é feita de pessoas apaixonadas pelo que fazem.
+      </p>
+
+      <div class="team-photo-big">
+        <img src="./assets/equipe.webp" alt="Equipe Marcenaria Modelo">
+      </div>
+    </div>
+  </section>
+  <section class="bg-gray-section"></section>
+  <!-- DEPOIMENTOS -->
+      <section class="section" id="depoimentos">
+        <div class="section-title">
+          <h2>O que nossos clientes dizem</h2>
+          <p>Confiança construída em cada detalhe e em cada entrega.</p>
+        </div>
+
+        <div class="testimonials">
+
+          <div class="testimonial-card">
+            <p>
+              “A Marcenaria Modelo transformou nossa cozinha em um ambiente de revista.
+              Acabamento impecável e entrega dentro do prazo.”
+            </p>
+            <h4>— Juliana R., Andradina-SP</h4>
+          </div>
+
+          <div class="testimonial-card">
+            <p>
+              “Equipe extremamente organizada. O projeto ficou exatamente como a arquiteta desenhou.
+              Luxo e qualidade de verdade.”
+            </p>
+            <h4>— Carlos M., Mirandópolis</h4>
+          </div>
+
+          <div class="testimonial-card">
+            <p>
+              “Do atendimento à montagem final, tudo perfeito.
+              Recomendo para quem quer móveis planejados premium.”
+            </p>
+            <h4>— Fernanda S., Pereira Barreto</h4>
+          </div>
+
+        </div>
+      </section>
+
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="section-title">
+      <h2>Dúvidas Frequentes</h2>
+      <p>Respostas rápidas sobre móveis planejados e nosso processo.</p>
+    </div>
+
+    <div style="margin-top:40px; max-width:800px; margin-inline:auto;">
+      <details style="padding:20px; background:white; border-radius:14px; margin-bottom:15px;">
+        <summary><b>Qual o prazo médio de entrega?</b></summary>
+        <p style="margin-top:10px;">
+          Nosso prazo padrão é de até <b>45 dias</b>, garantindo acabamento impecável.
+        </p>
+      </details>
+
+      <details style="padding:20px; background:white; border-radius:14px; margin-bottom:15px;">
+        <summary><b>Vocês atendem fora de Andradina?</b></summary>
+        <p style="margin-top:10px;">
+          Sim, atendemos toda a região mediante agendamento.
+        </p>
+      </details>
+
+      <details style="padding:20px; background:white; border-radius:14px;">
+        <summary><b>Os materiais são premium?</b></summary>
+        <p style="margin-top:10px;">
+          Trabalhamos apenas com MDF de alta qualidade, ferragens modernas e acabamento artesanal.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA FINAL PREMIUM -->
+  <section class="final-cta fade-section">
+
+    <div class="final-cta-box">
+      <h2>
+        Pronto para transformar seu ambiente<br>
+        com móveis planejados premium?
+      </h2>
+
+      <p>
+        Atendimento direto em Andradina-SP e região.<br>
+        Projetos exclusivos, acabamento impecável e entrega garantida em até <b>45 dias</b>.
+      </p>
+
+      <a
+        href="https://wa.me/5518997777079"
+        target="_blank"
+        class="final-cta-button"
+      >
+        💬 Solicitar Orçamento no WhatsApp
+      </a>
+
+      <span class="final-note">
+        Resposta rápida • Projeto sob medida • Alto padrão
+      </span>
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+    <img src="./assets/logo.svg" alt="Logo Marcenaria Modelo">
+      <h3>Marcenaria Modelo</h3>
+    </div>
+    <p>Andradina - SP | Parque Industrial 2</p>
+    <p>Onde o luxo encontra a pontualidade.</p>
+
+    <br>
+
+    <p>
+      📩 contatomarcenariamodelo@gmail.com <br>
+      📞 WhatsApp: (18) 99777-7079
+    </p>
+
+    <br>
+
+    <p>
+      <a href="https://www.instagram.com/marcenariamodeloandradina" target="_blank">
+        Instagram
+      </a>
+      |
+      <a href="https://www.facebook.com/people/Marcenaria-Modelo/61568449807790/" target="_blank">
+        Facebook
+      </a>
+    </p>
+
+    <br>
+
+    <p style="font-size:13px; opacity:0.6;">
+      © 2026 Desenvolvido por ZapFlow
+    </p>
+  </footer>
+
+  <!-- HERO LOOP -->
+  <script>
+    const heroImages = [
+      "./assets/hero1.webp",
+      "./assets/hero2.webp",
+      "./assets/hero3.webp",
+      "./assets/hero4.webp",
+      "./assets/hero5.webp",
+      "./assets/hero6.webp",
+    ];
+
+    let current = 0;
+    const heroImg = document.getElementById("heroImage");
+
+    setInterval(() => {
+      heroImg.style.opacity = 0;
+
+      setTimeout(() => {
+        current = (current + 1) % heroImages.length;
+        heroImg.src = heroImages[current];
+        heroImg.style.opacity = 1;
+      }, 1000);
+    }, 4000);
+
+    function openLightbox(src) {
+      document.getElementById("lightbox").classList.add("active");
+      document.getElementById("lightboxImg").src = src;
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("active");
+    }
+  </script>
+
+  <!-- WHATSAPP FLUTUANTE -->
+  <a
+    href="https://wa.me/5518997777079"
+    target="_blank"
+    class="whatsapp-float"
+  >
+    💬 Orçamento no WhatsApp
+  </a>
+
+  <script>
+    const sections = document.querySelectorAll(".fade-section");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+
+
+</body>
+</html>
